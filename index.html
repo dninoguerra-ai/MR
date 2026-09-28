@@ -10,6 +10,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -32,13 +33,13 @@
             background-size: cover;
             background-position: center;
             transition: opacity 1.5s ease-in-out;
-            z-index: 1; /* Capa más baja */
+            z-index: 1;
             opacity: 0;
         }
 
         /* Fondo inicial antes del SÍ */
         #bg-inicio {
-            background-image: url('foto_inicio.png'); /* Imagen inicial */
+            background-image: url('foto_inicio.png');
             opacity: 1;
         }
 
@@ -49,36 +50,45 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.45);
-            z-index: 2; /* Por encima de las fotos, por debajo de la tarjeta */
+            z-index: 2;
         }
 
-        /* Tarjeta */
+        /* Tarjeta optimizada para móviles */
         .card {
-            background: rgba(255, 255, 255, 0.5);
-            padding: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px 20px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             text-align: center;
-            max-width: 550px;
-            width: 90%;
-            backdrop-filter: blur(1px);
-            z-index: 10; /* Capa más alta para que reciba todos los clics */
+            max-width: 450px;
+            width: 85%;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 10;
             position: relative;
         }
 
         h1 {
             color: #d63031;
-            font-size: 2.3rem;
-            margin-bottom: 30px;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            line-height: 1.3;
+        }
+
+        #response-screen h1 {
+            color: #ffffff;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
         }
 
         .buttons-container {
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 20px;
-            height: 60px;
+            height: 70px;
             position: relative;
-            z-index: 20; /* Asegura los botones */
+            z-index: 20;
+            width: 100%;
         }
 
         .btn {
@@ -88,48 +98,64 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.1s patterns, background-color 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            user-select: none;
         }
 
-        #btn-yes { background-color: #2ecc71; color: white; }
-        #btn-yes:hover { transform: scale(1.1); background-color: #27ae60; }
-        #btn-no { background-color: #e74c3c; color: white; position: absolute; }
+        #btn-yes { 
+            background-color: #2ecc71; 
+            color: white; 
+            z-index: 25;
+        }
+        
+        #btn-yes:active { transform: scale(0.95); }
+
+        #btn-no { 
+            background-color: #e74c3c; 
+            color: white; 
+            position: absolute;
+            transition: left 0.15s ease-out, top 0.15s ease-out;
+            z-index: 24;
+        }
 
         .response-container { display: none; }
 
         .message {
-            color: #2d3436;
-            font-size: 1.1rem;
-            line-height: 1.6;
+            color: #ffffff;
+            font-size: 1.05rem;
+            line-height: 1.5;
             margin-bottom: 25px;
-            text-align: justify;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
         .counter-title {
-            color: #d63031;
+            color: #ffffff;
             font-weight: bold;
             margin-top: 15px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
         .counter {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-top: 10px;
+            gap: 8px;
+            margin-top: 12px;
         }
 
         .time-box {
-            background: #d63031;
+            background: rgba(214, 48, 49, 0.85);
             color: white;
-            padding: 10px 12px;
+            padding: 8px 10px;
             border-radius: 10px;
-            min-width: 65px;
+            min-width: 60px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        .time-box span { display: block; font-size: 1.4rem; font-weight: bold; }
-        .time-box label { font-size: 0.7rem; text-transform: uppercase; }
+        .time-box span { display: block; font-size: 1.3rem; font-weight: bold; }
+        .time-box label { font-size: 0.65rem; text-transform: uppercase; opacity: 0.9; }
 
         /* Corazones flotantes */
         .heart {
@@ -185,9 +211,9 @@
         </div>
 
         <div id="response-screen" class="response-container">
-            <h1>¡Dijiste que SÍ! 🥰🥰🥰🥰🥰🥰🥰🥰🥰🥰🥰</h1>
+            <h1>¡Dijiste que SÍ! 🥰</h1>
             <p class="message">
-                Me alegra mucho que aceptes este reto y que estés dispuesta a vivir una vida a mi lado. No sabes lo feliz que me hace saber tu respuesta; te aseguro que trabajaré día a día para que esto tan lindo que inicia hoy perdure en el tiempo. ¡Te amo muchisímo! ❤️❤️❤️❤️❤️❤️❤️❤️❤️•
+                Me alegra mucho que aceptes este reto y que estés dispuesta a vivir una vida a mi lado. No sabes lo feliz que me hace saber tu respuesta; te aseguro que trabajaré día a día para que esto tan lindo que inicia hoy perdure en el tiempo. ¡Te amo muchísimo! ❤️
             </p>
             
             <div class="counter-title">Tiempo juntos:</div>
@@ -207,25 +233,54 @@
         const responseScreen = document.getElementById('response-screen');
         const music = document.getElementById('romantic-music');
         
-        // Obtener todos los fondos excepto el de inicio
         const sliders = Array.from(document.querySelectorAll('.bg-slider')).filter(el => el.id !== 'bg-inicio');
         let currentSlide = 0;
-        let sliderInterval;
 
-        // Fecha de inicio (Ajusta los datos aquí si es necesario)
+        // FECHA DE INICIO FIJA (Año, Mes-1, Día, Hora, Minuto, Segundo)
+        // Ejemplo: 24 de Septiembre de 2026. En JS los meses van de 0 a 11 (Enero=0, Septiembre=8)
         const fechaInicio = new Date(2026, 8, 24, 0, 0, 0); 
 
-        // 1. Botón NO escurridizo
+        // 1. Botón NO Dinámico para Móviles y Escritorio
         btnNo.addEventListener('mouseover', moveButton);
-        btnNo.addEventListener('click', moveButton);
+        btnNo.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Evita clics fantasmas en móviles
+            moveButton();
+        });
+        btnNo.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
 
         function moveButton() {
-            const padding = 60;
-            const x = Math.random() * (window.innerWidth - btnNo.clientWidth - padding);
-            const y = Math.random() * (window.innerHeight - btnNo.clientHeight - padding);
+            const card = document.querySelector('.card');
+            const cardRect = card.getBoundingClientRect();
+            
+            // Límites seguros basados en el tamaño de la pantalla
+            const maxX = window.innerWidth - btnNo.clientWidth - 30;
+            const maxY = window.innerHeight - btnNo.clientHeight - 30;
+            
+            let randomX, randomY;
+            let overlapsCard = true;
+
+            // Intentar generar coordenadas que no queden exactamente detrás de la tarjeta
+            while (overlapsCard) {
+                randomX = Math.floor(Math.random() * maxX) + 15;
+                randomY = Math.floor(Math.random() * maxY) + 15;
+
+                // Verificar si la nueva posición choca con el contenedor principal
+                if (
+                    randomX + btnNo.clientWidth < cardRect.left ||
+                    randomX > cardRect.right ||
+                    randomY + btnNo.clientHeight < cardRect.top ||
+                    randomY > cardRect.bottom
+                ) {
+                    overlapsCard = false;
+                }
+            }
+
             btnNo.style.position = 'fixed';
-            btnNo.style.left = x + 'px';
-            btnNo.style.top = y + 'px';
+            btnNo.style.left = randomX + 'px';
+            btnNo.style.top = randomY + 'px';
         }
 
         // 2. Acción al dar clic en SÍ
@@ -233,38 +288,65 @@
             proposalScreen.style.display = 'none';
             responseScreen.style.display = 'block';
             
-            // Ocultar fondo inicial
             document.getElementById('bg-inicio').style.opacity = '0';
 
-            // Reproducir música
-            music.play().catch(e => console.log("La música requiere interacción previa"));
+            // Intentar reproducir música
+            music.play().catch(e => console.log("La reproducción requiere interacción del usuario"));
 
-            // Iniciar el Carrusel Infinito de Fotos
             startSlider();
 
-            // Iniciar Contador de Tiempo
+            // Ejecutar el contador inmediatamente y luego cada segundo
             actualizarContador();
             setInterval(actualizarContador, 1000);
 
-            // Iniciar Lluvia de Corazones
-            setInterval(createHeart, 300);
+            setInterval(createHeart, 400);
         });
 
-        // 3. Lógica del Slider Infinito (Vuelve a empezar automáticamente)
+        // 3. Lógica del Slider Infinito
         function startSlider() {
-            // Mostrar la primera foto inmediatamente
+            if(sliders.length === 0) return;
             sliders[currentSlide].style.opacity = '1';
 
-            sliderInterval = setInterval(() => {
-                // Ocultar la foto actual
+            setInterval(() => {
                 sliders[currentSlide].style.opacity = '0';
-                
-                // Avanzar a la siguiente foto de manera cíclica
                 currentSlide = (currentSlide + 1) % sliders.length;
-                
-                // Mostrar la nueva foto
                 sliders[currentSlide].style.opacity = '1';
-            }, 4000); // Cambia cada 4 segundos
+            }, 4000);
+        }
+
+        // 4. Lógica Fija y Precisa del Contador de Tiempo
+        function actualizarContador() {
+            const ahora = new Date();
+            let diferencia = ahora.getTime() - fechaInicio.getTime();
+
+            // Si la fecha configurada aún no pasa, se muestra en 0
+            if (diferencia < 0) {
+                diferencia = 0;
+            }
+
+            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(dias).padStart(2, '0');
+            document.getElementById('hours').innerText = String(horas).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(minutos).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(segundos).padStart(2, '0');
+        }
+
+        // 5. Corazones flotantes
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
         }
     </script>
 </body>
