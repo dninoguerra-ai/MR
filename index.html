@@ -32,7 +32,7 @@
             background-size: cover;
             background-position: center;
             transition: opacity 1.5s ease-in-out;
-            z-index: -2;
+            z-index: 1; /* Capa más baja */
             opacity: 0;
         }
 
@@ -49,20 +49,21 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.45);
-            z-index: -1;
+            z-index: 2; /* Por encima de las fotos, por debajo de la tarjeta */
         }
 
         /* Tarjeta */
         .card {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.5);
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             text-align: center;
             max-width: 550px;
             width: 90%;
-            backdrop-filter: blur(5px);
-            z-index: 10;
+            backdrop-filter: blur(1px);
+            z-index: 10; /* Capa más alta para que reciba todos los clics */
+            position: relative;
         }
 
         h1 {
@@ -77,6 +78,7 @@
             gap: 20px;
             height: 60px;
             position: relative;
+            z-index: 20; /* Asegura los botones */
         }
 
         .btn {
@@ -155,10 +157,20 @@
     <div id="bg-foto3" class="bg-slider" style="background-image: url('foto3.png');"></div>
     <div id="bg-foto4" class="bg-slider" style="background-image: url('foto4.png');"></div>
     <div id="bg-foto5" class="bg-slider" style="background-image: url('foto5.png');"></div>
-    
+    <div id="bg-foto6" class="bg-slider" style="background-image: url('foto6.png');"></div>
+    <div id="bg-foto7" class="bg-slider" style="background-image: url('foto7.png');"></div>
+    <div id="bg-foto8" class="bg-slider" style="background-image: url('foto8.png');"></div>
+    <div id="bg-foto9" class="bg-slider" style="background-image: url('foto9.png');"></div>
+    <div id="bg-foto10" class="bg-slider" style="background-image: url('foto10.png');"></div>
+    <div id="bg-foto11" class="bg-slider" style="background-image: url('foto11.png');"></div>
+    <div id="bg-foto12" class="bg-slider" style="background-image: url('foto12.png');"></div>
+    <div id="bg-foto13" class="bg-slider" style="background-image: url('foto13.png');"></div>
+    <div id="bg-foto14" class="bg-slider" style="background-image: url('foto14.png');"></div>
+    <div id="bg-foto15" class="bg-slider" style="background-image: url('foto15.png');"></div>
+    <div id="bg-foto16" class="bg-slider" style="background-image: url('foto16.png');"></div>
     <div class="tint"></div>
 
-    <!-- Música de fondo (Reemplaza musica.mp3 por tu archivo) -->
+    <!-- Música de fondo -->
     <audio id="romantic-music" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
@@ -175,7 +187,7 @@
         <div id="response-screen" class="response-container">
             <h1>¡Dijiste que SÍ! 🥰🥰🥰🥰🥰🥰🥰🥰🥰🥰🥰</h1>
             <p class="message">
-                Me alegra mucho que aceptes este reto y que estés dispuesta a vivir una vida a mi lado. No sabes lo feliz que me hace saber tu respuesta; te aseguro que trabajaré día a día para que esto tan lindo que inicia hoy perdure en el tiempo. ¡Te amo muchisímo! ❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️.
+                Me alegra mucho que aceptes este reto y que estés dispuesta a vivir una vida a mi lado. No sabes lo feliz que me hace saber tu respuesta; te aseguro que trabajaré día a día para que esto tan lindo que inicia hoy perdure en el tiempo. ¡Te amo muchisímo! ❤️❤️❤️❤️❤️❤️❤️❤️❤️•
             </p>
             
             <div class="counter-title">Tiempo juntos:</div>
@@ -195,7 +207,12 @@
         const responseScreen = document.getElementById('response-screen');
         const music = document.getElementById('romantic-music');
         
-        // Coloca aquí la fecha exacta en la que se lo vas a pedir
+        // Obtener todos los fondos excepto el de inicio
+        const sliders = Array.from(document.querySelectorAll('.bg-slider')).filter(el => el.id !== 'bg-inicio');
+        let currentSlide = 0;
+        let sliderInterval;
+
+        // Fecha de inicio (Ajusta los datos aquí si es necesario)
         const fechaInicio = new Date(2026, 8, 24, 0, 0, 0); 
 
         // 1. Botón NO escurridizo
@@ -215,55 +232,39 @@
         btnYes.addEventListener('click', () => {
             proposalScreen.style.display = 'none';
             responseScreen.style.display = 'block';
-
-            // Intentar reproducir música automáticamente
-            music.play().catch(error => console.log("La reproducción automática requería interacción del usuario (ya concedida con el click)."));
-
-            // Apagar fondo de inicio e iniciar carrusel de fotos
+            
+            // Ocultar fondo inicial
             document.getElementById('bg-inicio').style.opacity = '0';
-            startPhotoCarousel();
 
+            // Reproducir música
+            music.play().catch(e => console.log("La música requiere interacción previa"));
+
+            // Iniciar el Carrusel Infinito de Fotos
+            startSlider();
+
+            // Iniciar Contador de Tiempo
+            actualizarContador();
+            setInterval(actualizarContador, 1000);
+
+            // Iniciar Lluvia de Corazones
             setInterval(createHeart, 300);
-            setInterval(updateCounter, 1000);
-            updateCounter();
         });
 
-        // 3. Carrusel de Fotos de Fondo (Aparecen secuencialmente)
-        const fotosPost = [document.getElementById('bg-foto1'), document.getElementById('bg-foto2'), document.getElementById('bg-foto3'), document.getElementById('bg-foto4'), document.getElementById('bg-foto5')];
-        let fotoIndex = 0;
+        // 3. Lógica del Slider Infinito (Vuelve a empezar automáticamente)
+        function startSlider() {
+            // Mostrar la primera foto inmediatamente
+            sliders[currentSlide].style.opacity = '1';
 
-        function startPhotoCarousel() {
-            fotosPost[fotoIndex].style.opacity = '1'; // Mostrar primera foto
-            setInterval(() => {
-                fotosPost[fotoIndex].style.opacity = '0'; // Ocultar actual
-                fotoIndex = (fotoIndex + 1) % fotosPost.length; // Siguiente foto
-                fotosPost[fotoIndex].style.opacity = '1'; // Mostrar siguiente
-            }, 3500); // Cambia cada 3.5 segundos
-        }
-
-        // 4. Lluvia de corazones
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
-            document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 10000);
-        }
-
-        // 5. Contador
-        function updateCounter() {
-            const diferencia = new Date() - fechaInicio;
-            const dias = Math.floor(diferencia / 86400000);
-            const horas = Math.floor((diferencia % 86400000) / 3600000);
-            const minutos = Math.floor((diferencia % 3600000) / 600000);
-            const segundos = Math.floor((diferencia % 60000) / 1000);
-
-            document.getElementById('days').innerText = dias.toString().padStart(2, '0');
-            document.getElementById('hours').innerText = horas.toString().padStart(2, '0');
-            document.getElementById('minutes').innerText = minutos.toString().padStart(2, '0');
-            document.getElementById('seconds').innerText = segundos.toString().padStart(2, '0');
+            sliderInterval = setInterval(() => {
+                // Ocultar la foto actual
+                sliders[currentSlide].style.opacity = '0';
+                
+                // Avanzar a la siguiente foto de manera cíclica
+                currentSlide = (currentSlide + 1) % sliders.length;
+                
+                // Mostrar la nueva foto
+                sliders[currentSlide].style.opacity = '1';
+            }, 4000); // Cambia cada 4 segundos
         }
     </script>
 </body>
